@@ -196,3 +196,50 @@ resource "terraform_data" "mysql" {
         ]
     }
 }
+
+#route53 record created for mongodb insance to access it using a domain name instead of IP address. The record will be created in the hosted zone specified by the zone_id variable and will have a name in the format of mongodb-environment.domain_name. The record will point to the private IP address of the mongodb instance and will have a TTL of 1 second. The allow_overwrite attribute is set to true to allow updating the record if it already exists.
+
+resource "aws_route53_record" "mongodb" {
+    zone_id = var.zone_id
+    name    = "mongodb-${var.environment}.${var.domain_name}" # mongodb-dev.countryroot.fun
+    type    = "A"
+    ttl     = 1
+    records = [aws_instance.mongodb.private_ip]
+    allow_overwrite = true
+}
+
+#route53 record created for redis insance to access it using a domain name instead of IP address. The record will be created in the hosted zone specified by the zone_id variable and will have a name in the format of mongodb-environment.domain_name. The record will point to the private IP address of the mongodb instance and will have a TTL of 1 second. The allow_overwrite attribute is set to true to allow updating the record if it already exists.
+
+
+resource "aws_route53_record" "redis" {
+    zone_id = var.zone_id
+    name    = "redis-${var.environment}.${var.domain_name}" # redis-dev.countryroot.fun
+    type    = "A"
+    ttl     = 1
+    records = [aws_instance.redis.private_ip]
+    allow_overwrite = true
+}
+
+#route53 record created for mysql insance to access it using a domain name instead of IP address. The record will be created in the hosted zone specified by the zone_id variable and will have a name in the format of mongodb-environment.domain_name. The record will point to the private IP address of the mongodb instance and will have a TTL of 1 second. The allow_overwrite attribute is set to true to allow updating the record if it already exists.
+
+
+resource "aws_route53_record" "mysql" {
+    zone_id = var.zone_id
+    name    = "mysql-${var.environment}.${var.domain_name}" # mysql-dev.countryroot.fun
+    type    = "A"
+    ttl     = 1
+    records = [aws_instance.mysql.private_ip]
+    allow_overwrite = true
+}
+
+#route53 record created for rabbitmq insance to access it using a domain name instead of IP address. The record will be created in the hosted zone specified by the zone_id variable and will have a name in the format of mongodb-environment.domain_name. The record will point to the private IP address of the mongodb instance and will have a TTL of 1 second. The allow_overwrite attribute is set to true to allow updating the record if it already exists.
+
+
+resource "aws_route53_record" "rabbitmq" {
+    zone_id = var.zone_id
+    name    = "rabbitmq-${var.environment}.${var.domain_name}" # rabbitmq-dev.countryroot.fun
+    type    = "A"
+    ttl     = 1
+    records = [aws_instance.rabbitmq.private_ip]
+    allow_overwrite = true
+}

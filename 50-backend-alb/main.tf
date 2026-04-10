@@ -29,3 +29,18 @@ resource "aws_lb_listener" "backend_alb" {
     }
 }
 
+#create a route53 record to point to the backend ALB. The record will be used to access the backend ALB using a friendly name instead of the ALB DNS name. The record will be created in the hosted zone specified by the zone_id variable and will have a name in the format of *.backend-alb-environment.domain_name. 
+  
+resource "aws_route53_record" "backend_alb" {
+  zone_id = var.zone_id
+  name    = "*.backend-alb-${var.environment}.${var.domain_name}"
+  type    = "A"
+  allow_overwrite = true
+  alias {
+    # These are ALB details, not our domain details
+    name                   = aws_lb.backend_alb.dns_name
+    zone_id                = aws_lb.backend_alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
